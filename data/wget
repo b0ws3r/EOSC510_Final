@@ -1,0 +1,138 @@
+#! /bin/csh -f
+#
+# c-shell script to download selected files from rda.ucar.edu using Wget
+# NOTE: if you want to run under a different shell, make sure you change
+#       the 'set' commands according to your shell's syntax
+# after you save the file, don't forget to make it executable
+#   i.e. - "chmod 755 <name_of_script>"
+#
+# Experienced Wget Users: add additional command-line flags here
+#   Use the -r (--recursive) option with care
+#set opts = "-N"
+#
+#set cert_opt = ""
+# If you get a certificate verification error (version 1.10 or higher),
+# uncomment the following line:
+#set cert_opt = "--no-check-certificate"
+#
+# download the file(s)
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230401/gfs.0p25.2023040100.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230401/gfs.0p25.2023040106.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230401/gfs.0p25.2023040112.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230401/gfs.0p25.2023040118.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230402/gfs.0p25.2023040200.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230402/gfs.0p25.2023040206.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230402/gfs.0p25.2023040212.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230402/gfs.0p25.2023040218.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230403/gfs.0p25.2023040300.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230403/gfs.0p25.2023040306.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230403/gfs.0p25.2023040312.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230403/gfs.0p25.2023040318.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230404/gfs.0p25.2023040400.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230404/gfs.0p25.2023040406.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230404/gfs.0p25.2023040412.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230404/gfs.0p25.2023040418.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230405/gfs.0p25.2023040500.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230405/gfs.0p25.2023040506.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230405/gfs.0p25.2023040512.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230405/gfs.0p25.2023040518.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230406/gfs.0p25.2023040600.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230406/gfs.0p25.2023040606.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230406/gfs.0p25.2023040612.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230406/gfs.0p25.2023040618.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230407/gfs.0p25.2023040700.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230407/gfs.0p25.2023040706.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230407/gfs.0p25.2023040712.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230407/gfs.0p25.2023040718.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230408/gfs.0p25.2023040800.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230408/gfs.0p25.2023040806.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230408/gfs.0p25.2023040812.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230408/gfs.0p25.2023040818.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230409/gfs.0p25.2023040900.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230409/gfs.0p25.2023040906.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230409/gfs.0p25.2023040912.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230409/gfs.0p25.2023040918.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230410/gfs.0p25.2023041000.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230410/gfs.0p25.2023041006.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230410/gfs.0p25.2023041012.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230410/gfs.0p25.2023041018.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230411/gfs.0p25.2023041100.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230411/gfs.0p25.2023041106.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230411/gfs.0p25.2023041112.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230411/gfs.0p25.2023041118.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230412/gfs.0p25.2023041200.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230412/gfs.0p25.2023041206.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230412/gfs.0p25.2023041212.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230412/gfs.0p25.2023041218.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230413/gfs.0p25.2023041300.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230413/gfs.0p25.2023041306.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230413/gfs.0p25.2023041312.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230413/gfs.0p25.2023041318.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230414/gfs.0p25.2023041400.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230414/gfs.0p25.2023041406.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230414/gfs.0p25.2023041412.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230414/gfs.0p25.2023041418.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230415/gfs.0p25.2023041500.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230415/gfs.0p25.2023041506.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230415/gfs.0p25.2023041512.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230415/gfs.0p25.2023041518.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230416/gfs.0p25.2023041600.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230416/gfs.0p25.2023041606.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230416/gfs.0p25.2023041612.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230416/gfs.0p25.2023041618.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230417/gfs.0p25.2023041700.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230417/gfs.0p25.2023041706.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230417/gfs.0p25.2023041712.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230417/gfs.0p25.2023041718.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230418/gfs.0p25.2023041800.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230418/gfs.0p25.2023041806.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230418/gfs.0p25.2023041812.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230418/gfs.0p25.2023041818.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230419/gfs.0p25.2023041900.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230419/gfs.0p25.2023041906.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230419/gfs.0p25.2023041912.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230419/gfs.0p25.2023041918.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230420/gfs.0p25.2023042000.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230420/gfs.0p25.2023042006.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230420/gfs.0p25.2023042012.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230420/gfs.0p25.2023042018.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230421/gfs.0p25.2023042100.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230421/gfs.0p25.2023042106.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230421/gfs.0p25.2023042112.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230421/gfs.0p25.2023042118.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230422/gfs.0p25.2023042200.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230422/gfs.0p25.2023042206.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230422/gfs.0p25.2023042212.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230422/gfs.0p25.2023042218.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230423/gfs.0p25.2023042300.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230423/gfs.0p25.2023042306.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230423/gfs.0p25.2023042312.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230423/gfs.0p25.2023042318.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230424/gfs.0p25.2023042400.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230424/gfs.0p25.2023042406.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230424/gfs.0p25.2023042412.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230424/gfs.0p25.2023042418.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230425/gfs.0p25.2023042500.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230425/gfs.0p25.2023042506.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230425/gfs.0p25.2023042512.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230425/gfs.0p25.2023042518.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230426/gfs.0p25.2023042600.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230426/gfs.0p25.2023042606.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230426/gfs.0p25.2023042612.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230426/gfs.0p25.2023042618.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230427/gfs.0p25.2023042700.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230427/gfs.0p25.2023042706.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230427/gfs.0p25.2023042712.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230427/gfs.0p25.2023042718.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230428/gfs.0p25.2023042800.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230428/gfs.0p25.2023042806.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230428/gfs.0p25.2023042812.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230428/gfs.0p25.2023042818.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230429/gfs.0p25.2023042900.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230429/gfs.0p25.2023042906.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230429/gfs.0p25.2023042912.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230429/gfs.0p25.2023042918.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230430/gfs.0p25.2023043000.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230430/gfs.0p25.2023043006.f003.grib2
+wget $cert_opt $opts https://data.rda.ucar.edu/ds084.1/2023/20230430/gfs.0p25.2023043012.f003.grib2
+
