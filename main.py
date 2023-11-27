@@ -2,14 +2,17 @@
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 # import wgrib2
+import datetime
 import glob
 import os
 import numpy as np
 import pandas as pd
-
+import pickle
 import grib_parser
 import globals
 import prism_data_parser
+from data_merger import join_data
+
 
 # ************************************************************************************* #
 # This application requires that we have a file called wget
@@ -17,65 +20,6 @@ import prism_data_parser
 # We download the grib2 files for the region
 # Because I'm lazy, we don't have a wget script for the PRISM files. Assume they're a given
 # ************************************************************************************* #
-
-def haversine(lat1, lon1, lat2, lon2):
-    # Convert latitude and longitude from degrees to radians
-    lat1, lon1, lat2, lon2 = map(np.radians, [lat1, lon1, lat2, lon2])
-
-    # Haversine formula
-    dlat = lat2 - lat1
-    dlon = lon2 - lon1
-    a = np.sin(dlat/2)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon/2)**2
-    c = 2 * np.arcsin(np.sqrt(a))
-    r = 6371  # Radius of earth in kilometers. Use 3956 for miles
-    return c * r
-
-
-def join_data(prism_station_subset, gfs_daily_min, gfs_daily_max, prism_daily_min, prism_daily_max):
-    # Make sure the latitude and longitude columns are in the same format
-    # Convert to float if necessary, and round if necessary to match precision
-    prism_station_subset['Latitude'] = prism_station_subset['Latitude'].astype(float)
-    prism_station_subset['Longitude'] = prism_station_subset['Longitude'].astype(float)
-
-    prism_daily_min['Latitude'] = prism_daily_min['Latitude'].astype(float)
-    prism_daily_min['Longitude'] = prism_daily_min['Longitude'].astype(float)
-
-    # Join the dataframes on Latitude and Longitude
-    prism_with_elevation_merged_df = pd.merge(prism_daily_min, prism_station_subset,
-                                              how='inner',
-                                              left_on=['Latitude', 'Longitude'],
-                                              right_on=['Latitude', 'Longitude'])
-
-    prism_result = join_on_closest_lat_lon(prism_daily_min, prism_station_subset)
-    gfs_result = join_on_closest_lat_lon(gfs_daily_min, prism_with_elevation_merged_df)
-
-    # Check for any NaN values or duplicates and handle them as necessary
-    # merged_df.dropna(inplace=True)  # Uncomment this line to drop NaN values
-    # merged_df.drop_duplicates(inplace=True)  # Uncomment this line to drop duplicates
-
-    # The merged_df now contains the joined data
-    print("Merged all data")
-
-
-def join_on_closest_lat_lon(A, B):
-    # now join to gfs based on closest lat/lon :((((
-    # Iterate over each row in dataset A
-    closest = pd.DataFrame()
-    for index, row in A.iterrows():
-        # Calculate the distance to each point in dataset A
-        distances = B.apply(
-            lambda x: haversine(row['Latitude'], row['Longitude'], x['Latitude'], x['Longitude']),
-            axis=1
-        )
-        # Find the index of the closest point
-        closest_idx = distances.idxmin()
-        # Append the closest point to the closest DataFrame
-        closest = closest.append(B.loc[closest_idx])
-    # Reset index for consistency
-    closest.reset_index(drop=True, inplace=True)
-    # Join the closest coordinates with dataset F
-    result = pd.concat([A, closest], axis=1)
-    return result
 
 
 if __name__ == '__main__':
@@ -95,6 +39,7 @@ if __name__ == '__main__':
     if len(dirs) == 0:
         prism_data_parser.process_prism_files('tmin')
         prism_data_parser.process_prism_files('tmax')
+        prism_data_parser.process_prism_files('us')
 
     # Create NN INPUT matrix from ** clean ** file
     nn_input = pd.DataFrame({"Latitude", "Longitude", "Date", "elevation", "Fcst_TMin", "Fcst_TMax"})
@@ -106,18 +51,74 @@ if __name__ == '__main__':
     prism_daily_max = pd.read_pickle(f"data/{globals.prism_processed_files}/prism_tmax_202304.p")
 
     # 2. Assign each PRISM point to its station elevation
-    station_file_name = f'data/{globals.prism_processed_files}/station_data.p'
+    station_file_name = f'data/{globals.prism_processed_files}/prism_us_202304.p'
     exists = os.path.isfile(station_file_name)
     prism_stn_data = None
     if not exists:
         prism_stn_data = prism_data_parser.get_station_data()
     else:
         prism_stn_data = pd.read_pickle(station_file_name)
-    prism_station_subset = prism_stn_data[["Longitude", "Latitude", "Elevation(m)"]]
-
-    join_data(prism_station_subset, gfs_daily_min, gfs_daily_max, prism_daily_min, prism_daily_max)
 
     # Divide into training data - train on 1/2 of latitudes, validate on 1/4, test on 1/4 of latitudes
+    merged_file_name = "prism_gfs_all_columns_result.p"
+    dirs = glob.glob(f"data/merged_data/{merged_file_name}")
+    merged_data = None
+    if len(dirs) == 0:
+        merged_data = join_data(prism_stn_data, gfs_daily_min, gfs_daily_max, prism_daily_min, prism_daily_max)
+    else:
+        merged_data = pd.read_pickle(f"data/merged_data/{merged_file_name}")
+
+    ### Data standardization
+    # training is data pts b/w 48 and 48.5 deg north
+    # split X into training and validation datasets (50% train, 25% validation, 25% test)
+    trn_filter = merged_data["Latitude"].astype(float) < (48.5)
+
+    val_filter_S = merged_data["Latitude"] >= 48.5
+    val_filter_N = merged_data["Latitude"] < 48.75
+
+    tst_filter_S = merged_data["Latitude"] >= 48.75
+    tst_filter_N = merged_data["Latitude"] <= 49
+
+    # set training
+    train = merged_data[trn_filter]
+    x_train = train[["Latitude", "Longitude", "us", "gfs_tmin", "gfs_tmax"]]
+    y_train = train[["tmin_K", "tmax_K"]]
+    print(x_train.loc[1:2, :])
+
+    # validation is what we don't pick for training
+    val = merged_data[val_filter_N]
+    val = val[val_filter_S]
+
+    # pick some day to validate on
+    validation_date = datetime.date(2023, 4, 15)  # because why not
+    x_val = val[["Latitude", "Longitude", "us", "gfs_tmin", "gfs_tmax", "Date"]]
+    x_val = x_val[x_val["Date"] == validation_date]
+    x_val = x_val[["Latitude", "Longitude", "us", "gfs_tmin", "gfs_tmax"]]  # get rid of date col
+    print(x_val.iloc[1:2, :])
+    y_val = val[["tmin_K", "tmax_K", "Date"]]
+    y_val = y_val[y_val["Date"] == validation_date]
+    y_val = y_val[["tmin_K", "tmax_K", ]]
+
+    # standardize
+    vars = ["gfs_tmin", "gfs_tmax", "us"]
+    for var in vars:
+        x_mean = x_train[var].mean()
+        x_std = np.std(x_train[var])
+        x_train[var] = (x_train[var] - x_mean) / x_std
+        x_val[var] = (x_val[var] - x_mean) / x_std
+
+    y_vars = ["tmin_K", "tmax_K"]
+    for var in y_vars:
+        y_mean = y_train[var].mean()
+        y_std = np.std(y_train[var])
+        y_train[var] = (y_train[var] - y_mean) / y_std
+        y_val[var] = (y_val[var] - y_mean) / y_std
+
+    pickle.dump(x_train, open("data/merged_data/x_train.p", "wb"))
+    pickle.dump(y_train, open("data/merged_data/y_train.p", "wb"))
+    pickle.dump(x_train, open("data/merged_data/x_val.p", "wb"))
+    pickle.dump(y_train, open("data/merged_data/y_val.p", "wb"))
+
 
     # Create learning curves
     # Calculate error

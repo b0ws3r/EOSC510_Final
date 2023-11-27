@@ -1,3 +1,5 @@
+import datetime
+
 import numpy as np
 import pandas as pd
 import rasterio
@@ -23,6 +25,20 @@ def process_prism_files(variable):
             lons = np.zeros(pts)
             ts = np.zeros(pts)
             idx = 0
+
+            # get dates from file name
+            parts = prism_file.split('_')
+            date_part = parts[-2]  # The date part is the second last element
+            date = None
+            # Ensure that the extracted part is of the correct length for a date
+            if len(date_part) == 8:
+                # Try converting to a date to validate
+                year = int(date_part[0:4])
+                month = int(date_part[4:6])
+                day = int(date_part[6:8])
+                date = datetime.date(year, month, day)
+
+            print(f"Processing file for date: {date}")
             for j in range(degs_lon):
                 for i in range(degs_lat):
                     # Convert pixel coordinates to lat/lon
@@ -39,18 +55,22 @@ def process_prism_files(variable):
                     lats[idx] = lat
                     lons[idx] = lon
                     ts[idx] = tmp
-                    idx+=1
+
+                    idx += 1
 
         # we have degrees fahrenheit, lat, lon, and lots of nans...
         df = pd.DataFrame({'Latitude': lats, 'Longitude': lons, variable: ts})
+        df['Date'] = date
         nan_data_filter = df['Latitude'] > 0
         filtered_dataset = df[nan_data_filter]
-        filtered_dataset = filtered_dataset[globals.latS <=  filtered_dataset['Latitude']]
+        filtered_dataset = filtered_dataset[globals.latS <= filtered_dataset['Latitude']]
         filtered_dataset = filtered_dataset[filtered_dataset['Latitude'] <= globals.latN]
         filtered_dataset = filtered_dataset[globals.lonW <= filtered_dataset['Longitude']]
         filtered_dataset = filtered_dataset[filtered_dataset['Longitude'] <= globals.lonE]
-        kelvins = filtered_dataset[variable] * (5 / 9) + 459.67
-        filtered_dataset[f"{variable}_K"] = kelvins
+        # only do Kelvin conv if we're working with temp
+        if variable != 'us':
+            kelvins = (filtered_dataset[variable] -32)* (5 / 9) + 273.15
+            filtered_dataset[f"{variable}_K"] = kelvins
         frames.append(filtered_dataset)
 
     df = pd.concat(frames)
