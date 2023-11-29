@@ -16,3 +16,9 @@ gfs_daily_min_max = "gfs_final" # csv files containing daily tmin/tmax for each 
 raw_prism = "prism" # contains raw prism data (all available lat/lon, fahrenheit observations). These are .bil files
 # Post-processed PRISM files directory name
 prism_processed_files = "prism_pp" # Pickle files: filtered for NAN's, filtered for lat/lon range, converted to K
+
+
+
+val_filter = [48.5, 48.75]# df["Latitude"] >= 48.5
+trn_filter = [48, 48.5]
+tst_filter = [48.75, 49]

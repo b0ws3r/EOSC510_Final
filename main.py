@@ -12,7 +12,7 @@ import grib_parser
 import globals
 import prism_data_parser
 from data_merger import join_data
-
+import Visuals
 
 # ************************************************************************************* #
 # This application requires that we have a file called wget
@@ -21,6 +21,51 @@ from data_merger import join_data
 # Because I'm lazy, we don't have a wget script for the PRISM files. Assume they're a given
 # ************************************************************************************* #
 
+
+def split_mlp_train_validation_data(merged_data):
+    global x_train, y_train
+    trn_filter = merged_data["Latitude"].astype(float) < (48.5)
+    val_filter_S = merged_data["Latitude"] >= 48.5
+    val_filter_N = merged_data["Latitude"] < 48.75
+    tst_filter_S = merged_data["Latitude"] >= 48.75
+    tst_filter_N = merged_data["Latitude"] <= 49
+    # set training
+    train = merged_data[trn_filter]
+    x_train = train[["Latitude", "Longitude", "us", "gfs_tmin", "gfs_tmax"]]
+    y_train = train[["tmin_K", "tmax_K"]]
+    print(x_train.loc[1:2, :])
+    # validation is what we don't pick for training
+    val = merged_data[val_filter_N]
+    val = val[val_filter_S]
+    # pick some day to validate on
+    validation_date = datetime.date(2023, 4, 15)  # because why not
+    x_val = val[["Latitude", "Longitude", "us", "gfs_tmin", "gfs_tmax", "Date"]]
+    x_val['Date'] = pd.to_datetime(x_val['Date'])
+    date_filter = x_val["Date"] == pd.Timestamp(2023, 4, 15)
+    x_val = x_val[date_filter]
+    print(x_val.head(3))
+    y_val = val[["tmin_K", "tmax_K", "Date"]]
+    y_val = y_val[y_val["Date"] == validation_date]
+    y_val = y_val[["tmin_K", "tmax_K", ]]
+    print(y_val.head(3))
+    # standardize
+    vars = ["gfs_tmin", "gfs_tmax", "us"]
+    for var in vars:
+        x_mean = x_train[var].mean()
+        x_std = np.std(x_train[var])
+        x_train[var] = (x_train[var] - x_mean) / x_std
+        x_val[var] = (x_val[var] - x_mean) / x_std
+    y_vars = ["tmin_K", "tmax_K"]
+    for var in y_vars:
+        y_mean = y_train[var].mean()
+        y_std = np.std(y_train[var])
+        y_train[var] = (y_train[var] - y_mean) / y_std
+        y_val[var] = (y_val[var] - y_mean) / y_std
+
+    pickle.dump(x_train, open("data/merged_data/x_train.p", "wb"))
+    pickle.dump(y_train, open("data/merged_data/y_train.p", "wb"))
+    pickle.dump(x_train, open("data/merged_data/x_val.p", "wb"))
+    pickle.dump(y_train, open("data/merged_data/y_val.p", "wb"))
 
 if __name__ == '__main__':
     # Download gribs and filter to our spatial region
@@ -68,57 +113,7 @@ if __name__ == '__main__':
     else:
         merged_data = pd.read_pickle(f"data/merged_data/{merged_file_name}")
 
-    ### Data standardization
-    # training is data pts b/w 48 and 48.5 deg north
-    # split X into training and validation datasets (50% train, 25% validation, 25% test)
-    trn_filter = merged_data["Latitude"].astype(float) < (48.5)
-
-    val_filter_S = merged_data["Latitude"] >= 48.5
-    val_filter_N = merged_data["Latitude"] < 48.75
-
-    tst_filter_S = merged_data["Latitude"] >= 48.75
-    tst_filter_N = merged_data["Latitude"] <= 49
-
-    # set training
-    train = merged_data[trn_filter]
-    x_train = train[["Latitude", "Longitude", "us", "gfs_tmin", "gfs_tmax"]]
-    y_train = train[["tmin_K", "tmax_K"]]
-    print(x_train.loc[1:2, :])
-
-    # validation is what we don't pick for training
-    val = merged_data[val_filter_N]
-    val = val[val_filter_S]
-
-    # pick some day to validate on
-    validation_date = datetime.date(2023, 4, 15)  # because why not
-    x_val = val[["Latitude", "Longitude", "us", "gfs_tmin", "gfs_tmax", "Date"]]
-    x_val = x_val[x_val["Date"] == validation_date]
-    x_val = x_val[["Latitude", "Longitude", "us", "gfs_tmin", "gfs_tmax"]]  # get rid of date col
-    print(x_val.iloc[1:2, :])
-    y_val = val[["tmin_K", "tmax_K", "Date"]]
-    y_val = y_val[y_val["Date"] == validation_date]
-    y_val = y_val[["tmin_K", "tmax_K", ]]
-
-    # standardize
-    vars = ["gfs_tmin", "gfs_tmax", "us"]
-    for var in vars:
-        x_mean = x_train[var].mean()
-        x_std = np.std(x_train[var])
-        x_train[var] = (x_train[var] - x_mean) / x_std
-        x_val[var] = (x_val[var] - x_mean) / x_std
-
-    y_vars = ["tmin_K", "tmax_K"]
-    for var in y_vars:
-        y_mean = y_train[var].mean()
-        y_std = np.std(y_train[var])
-        y_train[var] = (y_train[var] - y_mean) / y_std
-        y_val[var] = (y_val[var] - y_mean) / y_std
-
-    pickle.dump(x_train, open("data/merged_data/x_train.p", "wb"))
-    pickle.dump(y_train, open("data/merged_data/y_train.p", "wb"))
-    pickle.dump(x_train, open("data/merged_data/x_val.p", "wb"))
-    pickle.dump(y_train, open("data/merged_data/y_val.p", "wb"))
-
-
     # Create learning curves
     # Calculate error
+    Visuals.visualize_prism(2023, 4, 15, '')
+    Visuals.visualize_gfs(2023, 4, 15, '')
