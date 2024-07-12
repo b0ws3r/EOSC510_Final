@@ -125,7 +125,8 @@ def visualize_prism(year, month, day, pickle_file_name, variable_name, stage=Non
     return x, y, grid_temp
 
 
-wdir = 'data/model_outputs'
+# wdir = 'data/model_outputs'
+wdir = 'data/model2_outputs'
 
 # tmax
 xarr = list()

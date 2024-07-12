@@ -2,3 +2,7 @@
 /data/gfs_3hr_min_max/
 /data/prism/
 /data/prism_pp/
+/__pycache__/
+.~lock.Target_Data_Format.ods#
+node_modules/
+/data/*

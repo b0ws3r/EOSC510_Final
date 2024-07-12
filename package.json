@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "pyproj": "^1.0.1"
+  }
+}
